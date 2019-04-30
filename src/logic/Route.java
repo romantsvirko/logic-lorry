@@ -4,7 +4,7 @@ public class Route {
 
     private int routeId;
 	
-	private String nomberOfWaybill;
+	private String numberOfWaybill;
 	
 	private String placeOfLoading;
 	
@@ -22,12 +22,12 @@ public class Route {
 		this.routeId = routeId;
 	}
 	
-	public String getNomberOfWaybill() {
-		return nomberOfWaybill;
+	public String getNumberOfWaybill() {
+		return numberOfWaybill;
 	}
 	
-	public void setNomberOfWaybill(String nomberOfWaybill) {
-		this.nomberOfWaybill = nomberOfWaybill;
+	public void setNumberOfWaybill(String numberOfWaybill) {
+		this.numberOfWaybill = numberOfWaybill;
 	}
 	
 	public String getPlaceOfLoading() {
@@ -42,7 +42,7 @@ public class Route {
 		return unloadingPoint;
 	}
 	
-	public void setuUnloadingPoint(String unloadingPoint) {
+	public void setUnloadingPoint(String unloadingPoint) {
 		this.unloadingPoint = unloadingPoint;
 	}
 	

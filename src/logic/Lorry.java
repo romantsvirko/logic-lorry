@@ -6,7 +6,7 @@ public class Lorry {
 	
 	private String carBrand;
 	
-	private String nomberOfLorry;
+	private String numberOfLorry;
 	
 	private String tonnage;
 	
@@ -30,12 +30,12 @@ public class Lorry {
 		this.carBrand = carBrand;
 	}
 	
-	public String getNomberOfLorry() {
-		return nomberOfLorry;
+	public String getNumberOfLorry() {
+		return numberOfLorry;
 	}
 	
-	public void setNomberOfLorry(String nomberOfLorry) {
-		this.nomberOfLorry = nomberOfLorry;
+	public void setNumberOfLorry(String numberOfLorry) {
+		this.numberOfLorry = numberOfLorry;
 	}
 	
 	public String getTonnage() {
