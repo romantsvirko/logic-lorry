@@ -83,7 +83,7 @@ public class ManagementSystem {
 		List<Lorry> lorries = ms.getLorries();
 		for (Lorry li : lorries) {
 			printString("--->> Lorry:" + li.getNumberOfLorry());
-			Collection<Driver> drivers = ms.getDriverFromLorry(li, 3536);
+			Collection<Driver> drivers = ms.getDriversFromLorry(li, 3536);
 			for (Driver di : drivers) {
 				printString(di);
 			}
@@ -95,7 +95,7 @@ public class ManagementSystem {
 		List<Route> routes = ms.getRoetes();
 		for (Route ri : routes) {
 			printString("--->> Route:" + ri.getNumberOfRoute());
-			Collection<Driver> drivers = ms.getDriverFromRoute(ri, 32);
+			Collection<Driver> drivers = ms.getDriversFromRoute(ri, 32);
 			for (Driver di : drivers) {
 				printString(di);
 			}
@@ -107,7 +107,7 @@ public class ManagementSystem {
 		List<Route> routes = ms.getRoetes();
 		for (Route ri : routes) {
 			printString("--->> Route:" + ri.getNumberOfRoute());
-			List<Cargo> cargos = ms.getCargoFromRoute(ri, 32);
+			List<Cargo> cargos = ms.getCargosFromRoute(ri, 32);
 			for (Cargo ci : cargos) {
 				printString(ci);
 			}
@@ -386,6 +386,38 @@ public class ManagementSystem {
 	    return l;
 	}
 	
+	public void moveDriversToLorry(Lorry oldLorry, int oldYear, Lorry newLorry, int newYear) {
+	    for (Driver di : drivers) {
+	    	if (di.getLorryId() == oldLorry.getLorryId() && di.getWorkExperience() == oldYear) {
+	    		di.setLorryId(newLorry.getLorryId());
+	    		di.setWorkExperience(newYear);
+	    	}
+	    }
+	}
+	
+	public void removeDriversFromLorry(Lorry lorry, int year) {
+		Collection<Driver> tmp = new TreeSet<Driver>();
+		for (Driver di : drivers) {
+			if (di.getLorryId() != lorry.getLorryId() || di.getWorkExperience() != year) {
+                tmp.add(di);				
+			}
+		}
+		drivers = tmp;
+	}
+	
+	public Collection<driver> getDriversFromRoute(Route route, int year) {
+		Collection<Driver> r = new TreeSet<Driver>();
+		for (Driver di : drivers) {
+			if (di.getRouteId() ==route.getRouteId() && di.getWorkExperience() == year) {
+				r.add(di);
+			}
+		}
+		return r;
+	}
+		
+	public void moveDriversT0Route(Route oldRoute, int oldYear, Route newRoute, int newYear) {
+		
+	}
 	
 
 
