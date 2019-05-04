@@ -11,13 +11,11 @@ import java.util.List;
 import java.util.TreeSet;
 
 public class ManagementSystem {
-	//private List<Driver> drivers;
 	private List<Lorry> lorries;
 	private List<Route> routes;
 	private List<Cargo> cargos;
 	private Collection<Driver> drivers;
-	//private Collection<Lorry> collorries;
-	
+		
 	private static ManagementSystem instance;
 	
 	private ManagementSystem( ) {
@@ -25,8 +23,6 @@ public class ManagementSystem {
 		loadLorries();
 		loadRoutes();
 		loadCargos();
-		//loadColdrivers();
-		//loadCollorries();
 	}
 	
 	public static synchronized ManagementSystem getInstance() {
@@ -92,9 +88,9 @@ public class ManagementSystem {
 		
 		printString("List of drivers from routes");
 		printString("**************************");
-		List<Route> routes = ms.getRoetes();
+		List<Route> routes = ms.getRoutes();
 		for (Route ri : routes) {
-			printString("--->> Route:" + ri.getNumberOfRoute());
+			printString("--->> Route:" + ri.getRouteId());
 			Collection<Driver> drivers = ms.getDriversFromRoute(ri, 32);
 			for (Driver di : drivers) {
 				printString(di);
@@ -102,12 +98,24 @@ public class ManagementSystem {
 		}
 		printString();
 		
-		printString("List of cargos from routes");
+		printString("List of lorries from routes");
 		printString("**************************");
-		List<Route> routes = ms.getRoetes();
+		routes = ms.getRoutes();
 		for (Route ri : routes) {
-			printString("--->> Route:" + ri.getNumberOfRoute());
-			List<Cargo> cargos = ms.getCargosFromRoute(ri, 32);
+			printString("--->> Route:" + ri.getRouteId());
+			TreeSet<Lorry> alllorries = ms.getLorriesFromRoute(ri, 32);
+			for (Lorry li : alllorries) {
+				printString(li);
+			}
+		}
+		printString();
+		
+		printString("List of cargos from lorries");
+		printString("**************************");
+		lorries = ms.getLorries();
+		for (Lorry li : lorries) {
+			printString("--->> Lorry:" + li.getNumberOfLorry());
+			TreeSet<Cargo> cargos = ms.getCargosFromLorry(li, 32);
 			for (Cargo ci : cargos) {
 				printString(ci);
 			}
@@ -141,7 +149,7 @@ public class ManagementSystem {
 		d.setSurName("Big");
 		d.setPatronymic("Well");
 		d.setSex('M');
-		Calendar c = Calendar.getInstance();
+		c = Calendar.getInstance();
 		c.set(1989, 5, 29);
 		d.setDateOfBirth(c.getTime());
 		d.setLorryId(5);
@@ -183,18 +191,38 @@ public class ManagementSystem {
 		ms.removeDriversFromLorry(l2, 2001);
 		printString("--->> Full list of driver after removing");
 		allDrivers = ms.getAllDrivers();
-		for(Iterator i = allDrivers.iterator();i.hasNext();) {
+		for(Iterator<Driver> i = allDrivers.iterator();i.hasNext();) {
 			printString(i.next());
 		}
 		printString();
 		
 		Route r1 = routes.get(0);
 		Route r2 = routes.get(1);
+		printString("Move drivers from first route to second");
+		printString("***************************************");
+		ms.moveDriversToRoute(r1, 1, r2, 2);
+		printString("--->> Full list of driver after moving");
+		allDrivers = ms.getAllDrivers();
+		for(Driver di : allDrivers) {
+			printString(di);
+		}
+		printString();
+		
+		printString("Remove drivers from route:" + r2 + "with id 2");
+		printString("**************************");
+		ms.removeDriversFromRoute(r2, 2);
+		printString("--->> Full list of driver after removing");
+		allDrivers = ms.getAllDrivers();
+		for(Iterator<Driver> i = allDrivers.iterator();i.hasNext();) {
+			printString(i.next());
+		}
+		printString();
+		
 		printString("Move lorries from first route to second");
 		printString("***************************************");
 		ms.moveLorriesToRoute(r1, 2001, r2, 2002);
 		printString("--->> Full list of lorries after moving");
-		allLorries = ms.getAlllorries();
+		allLorries = ms.getLorries();
 		for(Lorry li : allLorries) {
 			printString(li);
 		}
@@ -204,8 +232,8 @@ public class ManagementSystem {
 		printString("**************************");
 		ms.removeLorriesFromRoute(r2, 2001);
 		printString("--->> Full list of lorry after removing");
-		allLorries = ms.getAllLorries();
-		for(Iterator i = allLorries.iterator();i.hasNext();) {
+		allLorries = ms.getLorries();
+		for(Iterator<Lorry> i = allLorries.iterator();i.hasNext();) {
 			printString(i.next());
 		}
 		printString();
@@ -216,7 +244,7 @@ public class ManagementSystem {
 		printString("**************************************");
 		ms.moveCargosToLorry(l1, 2001, l2, 2002);
 		printString("--->> Full list of cargo after moving");
-		allCargos = ms.getAllCargos();
+		allCargos = ms.getCargos();
 		for(Cargo ci : allCargos) {
 			printString(ci);
 		}
@@ -226,15 +254,15 @@ public class ManagementSystem {
 		printString("*************************");
 		ms.removeCargosFromLorry(l2, 2001);
 		printString("--->> Full list of cargo after removing");
-		allCargos = ms.getAllCargos();
-		for(Iterator i = allCargos.iterator();i.hasNext();) {
+		allCargos = ms.getCargos();
+		for(Iterator<Cargo> i = allCargos.iterator();i.hasNext();) {
 			printString(i.next());
 		}
 		printString();
 	}
 	public void loadLorries() {
 		if(lorries == null) {
-			lorries = new ArrayList<Lorry>();
+			lorries = (List<Lorry>) new ArrayList<Lorry>();
 		} else {
 			lorries.clear();
 		}
@@ -303,7 +331,7 @@ public class ManagementSystem {
 	
 	public void loadDrivers() {
 		if (drivers == null) {
-			students = new TreeSet<Driver>();
+			drivers = new TreeSet<Driver>();
 		} else {
 			drivers.clear();
 		}
@@ -405,22 +433,133 @@ public class ManagementSystem {
 		drivers = tmp;
 	}
 	
-	public Collection<driver> getDriversFromRoute(Route route, int year) {
+	public Collection<Driver> getDriversFromRoute(Route route, int year) {
 		Collection<Driver> r = new TreeSet<Driver>();
 		for (Driver di : drivers) {
-			if (di.getRouteId() ==route.getRouteId() && di.getWorkExperience() == year) {
+			if (di.getLorryId() == route.getRouteId() && di.getWorkExperience() == year) {
 				r.add(di);
 			}
 		}
 		return r;
 	}
 		
-	public void moveDriversT0Route(Route oldRoute, int oldYear, Route newRoute, int newYear) {
-		
+	public void moveDriversToRoute(Route oldRoute, int oldYear, Route newRoute, int newYear) {
+		for (Driver di : drivers) {
+			if (di.getLorryId() == oldRoute.getRouteId() && di.getWorkExperience() == oldYear) {
+				di.setLorryId(newRoute.getRouteId());
+				di.setWorkExperience(newYear);
+			}
+		}
 	}
 	
-
-
+	public void removeDriversFromRoute(Route route, int year) {
+		Collection<Driver> tmp = new TreeSet<Driver>();
+		for (Driver di : drivers) {
+			if (di.getLorryId() != route.getRouteId() || di.getWorkExperience() != year) {
+				tmp.add(di);
+			}
+		}
+		drivers = tmp;
+	}
+	
+	public TreeSet<Lorry> getLorriesFromRoute(Route route, int id) {
+		TreeSet<Lorry> r = new TreeSet<Lorry>();
+		for (Lorry li : lorries) {
+			if (li.getLorryId() == route.getRouteId() && li.getRouteId() == id) {
+				r.add(li);
+			}
+		}
+		return r;
+	}
+	
+	public void moveLorriesToRoute(Route oldRoute, int oldYear, Route newRoute, int newYear) {
+		for (Lorry li : lorries) {
+			if (li.getLorryId() == oldRoute.getRouteId() && li.getRouteId() == oldYear) {
+				li.setLorryId(newRoute.getRouteId());
+				li.setRouteId(newYear);
+			}
+		}
+	}
+	
+	public void removeLorriesFromRoute(Route route, int id) {
+		List<Lorry> tmp = new ArrayList<Lorry>();
+		for (Lorry li : lorries) {
+			if (li.getLorryId() != route.getRouteId() || li.getRouteId() != id) {
+				tmp.add(li);
+			}
+		}
+		lorries = tmp;
+	}
+	
+	public TreeSet<Cargo> getCargosFromLorry(Lorry lorry, int id) {
+		TreeSet<Cargo> l = new TreeSet<Cargo>();
+		for (Cargo ci : cargos) {
+			if (ci.getCargoId() == lorry.getRouteId() && ci.getCargoId() == id) {
+				l.add(ci);
+			}
+		}
+		return l;
+	}
+	
+	public void moveCargosToLorry(Lorry oldLorry, int oldYear, Lorry newLorry, int newYear) {
+		for (Cargo ci : cargos) {
+			if (ci.getCargoId() == oldLorry.getRouteId() && ci.getCargoId() == oldYear) {
+				ci.setCargoId(newLorry.getCargoId());
+				ci.setCargoId(newYear);
+			}
+		}
+	}
+	
+	public void removeCargosFromLorry(Lorry lorry, int id) {
+		List<Cargo> tmp = new ArrayList<Cargo>();
+		for (Cargo ci : cargos) {
+			if (ci.getCargoId() != lorry.getCargoId() || ci.getCargoId() != id) {
+				tmp.add(ci);
+			}
+		}
+		cargos = tmp;
+	}
+	
+	public void insertDriver(Driver driver) {
+		drivers.add(driver);
+	}
+	
+	public void updateDriver(Driver driver) {
+		Driver updDriver = null;
+		for (Driver di : drivers) {
+			if (di.getDriverId() == driver.getDriverId()) {
+				updDriver = di;
+				break;
+			}
+		}
+		updDriver.setFirstName(driver.getFirstName());
+		updDriver.setPatronymic(driver.getPatronymic());
+		updDriver.setSurName(driver.getSurName());
+		updDriver.setSex(driver.getSex());
+		updDriver.setDateOfBirth(driver.getDateOfBirth());
+		updDriver.setLorryId(driver.getLorryId());
+		updDriver.setWorkExperience(driver.getWorkExperience());
+	}
+	
+	public void deleteDriver(Driver driver) {
+		Driver delDriver = null;
+		for (Driver di : drivers) {
+			if (di.getDriverId() == driver.getDriverId()) {
+				delDriver = di;
+				break;
+			}
+		}
+		drivers.remove(delDriver);
+	}
+	
+	public static void printString(Object s) {
+		try {
+			System.out.println(new String(s.toString().getBytes("windows-1251"), "windows-1251"));
+		} catch (UnsupportedEncodingException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	public static void printString() {
 		System.out.println();
 	}

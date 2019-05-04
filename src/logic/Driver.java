@@ -5,7 +5,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Driver implements Comporable  {
+public class Driver implements Comparable  {
 
 	private int driverId;
 	
