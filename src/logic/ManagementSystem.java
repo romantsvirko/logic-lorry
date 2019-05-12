@@ -32,7 +32,7 @@ public class ManagementSystem {
 		return instance;
 	}
 	
-	public static void main(String[] args) {
+	/* public static void main(String[] args) {
 		try {
 			System.setOut(new PrintStream("out.txt"));
 		} catch (FileNotFoundException ex) {
@@ -259,7 +259,8 @@ public class ManagementSystem {
 			printString(i.next());
 		}
 		printString();
-	}
+	} */
+	
 	public void loadLorries() {
 		if(lorries == null) {
 			lorries = (List<Lorry>) new ArrayList<Lorry>();
